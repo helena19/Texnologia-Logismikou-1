@@ -27,13 +27,38 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-        System.out.println("Please give the path of the git repository.");
-		Scanner scanner = new Scanner(System.in);
-		String filePath = scanner.nextLine();
-		System.out.println(filePath);
-        System.out.println("Please give the path of the results.");
-		String resultsPath = scanner.nextLine();
-		System.out.println(resultsPath);
-		scanner.close();
+		Scanner scanner;
+        /*--------------------------------------------------------------------*/
+		if (args.length != 2) {
+			System.out.println("Wrong arguments. Exiting...");
+			System.exit(-1);
+		}
+		String filePath = args[0];
+		String resultsPath = args[1];
+        String  HTMLFile = createHTML(args);
+
+        System.out.println("Path to clone: " + filePath);
+		System.out.println("Path to print results: " + resultsPath);
+		File resultsDirectory = null;
+		boolean bool = false;
+		try {
+			resultsDirectory = new File(resultsPath);
+			bool = resultsDirectory.mkdir();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		String results = resultsDirectory + "/results.html";
+		String resultsHTML = null;
+		/*--------------------------------------------------------------------*/
+        int i, j, k;
+        String commandResults = null;
+        /*----------------------------------1---------------------------------*/
+        String command = "git ls-files";	//get all files
+		commandResults = execute(command, filePath, null);
+		String fileNames[] = commandResults.split("\\r?\\n");
+		Integer numOfFiles = fileNames.length;
+		//System.out.println("Repository contains " + numOfFiles + " files.");
+		/*----------------------------END OF 1--------------------------------*/
 	}
 }
