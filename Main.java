@@ -1,5 +1,3 @@
-//package ergasia_1;
-
 import java.util.*;
 import java.io.*;
 
@@ -31,11 +29,11 @@ public class Main {
 
     public static String createHTML(String[] args) {
         String html = "<!DOCTYPE html><html lang=\"en\"><head>  <title>Software Technology</title>  <meta charset=\"utf-8\">  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js\"></script>  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script></head><body>    <form><div class=\"panel panel-info\">    <div class=\"panel-heading\" style=\"font-weight: bold; height: 65px;\"><img alt=\"My Image\" src=\"Software-Git.png\" width=\"40\" height=\"50\" align=\"left\"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Software Technology - Assignment 1    </div>            <div class=\"panel-body\" style=\"font-weight: bold;\">Repository name:" + args[0] + "</div></div>";
-        html += " <div class=\"container\"><div class=\"panel panel-default\"><div class=\"panel-heading\"><img alt=\"My Image2\" src=\"file.png\" width=\"25\" height=\"25\" align=\"left\"/>&nbsp; Number of files in repository:";
+        html += " <div class=\"container\"><div class=\"panel panel-default\"><div class=\"panel-heading\"><img alt=\"My Image2\" src=\"file.png\" width=\"25\" height=\"25\" align=\"left\"/>&nbsp; Number of files in repository: &nbsp;";
         return html;
     }
     public static String addHTML1(String html) {
-        html += "<div class=\"panel panel-default\"><div class=\"panel-heading\"><img alt=\"My Image3\" src=\"notepad.png\" width=\"25\" height=\"25\" align=\"left\"/>&nbsp; Number of lines in repository:";
+        html += "<div class=\"panel panel-default\"><div class=\"panel-heading\"><img alt=\"My Image3\" src=\"notepad.png\" width=\"25\" height=\"25\" align=\"left\"/>&nbsp; Number of lines in repository: &nbsp;";
         return html;
     }
     public static String addHTML2(String html) {
@@ -73,16 +71,16 @@ public class Main {
         return html;
     }
     public static String addHTML9(String html) {
-        html += "<table class=\"table table-bordered\">    <caption>Commits per author per year</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Years</th>      <th>Commits</th>      <th>Percents</th>    </tr>  </thead>  <tbody>";
+        html += "<table class=\"table table-bordered\">    <caption>Commits per author per year</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Years</th>      <th>Commits</th>      <th>Commits per year</th>    </tr>  </thead>  <tbody>";
         return html;
     }
 
     public static String addHTML10(String html) {
-        html += "<table class=\"table table-bordered\">    <caption>Commits per author per month</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Months</th>      <th>Commits</th>      <th>Percents</th>    </tr>  </thead>  <tbody>";
+        html += "<table class=\"table table-bordered\">    <caption>Commits per author per month</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Months</th>      <th>Commits</th>      <th>Commits per month</th>    </tr>  </thead>  <tbody>";
         return html;
     }
     public static String addHTML11(String html) {
-        html += "<table class=\"table table-bordered\">    <caption>Commits per author per day</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Days</th>      <th>Commits</th>      <th>Percents</th>    </tr>  </thead>  <tbody>";
+        html += "<table class=\"table table-bordered\">    <caption>Commits per author per day</caption>  <thead>    <tr style=\"background:#d4e1f7;\">      <th>Commiter</th>      <th>Days</th>      <th>Commits</th>      <th>Commits per day</th>    </tr>  </thead>  <tbody>";
         return html;
     }
     public static String addHTML12(String html) {
@@ -144,9 +142,6 @@ public class Main {
                     filelines++;
                 }
                 bufferedReader.close();
-            }
-            catch(FileNotFoundException ex) {
-                System.out.println("Unable to open file '" + command + "'");
             }
             catch(IOException ex) {
                 System.out.println("Error reading file '" + command + "'");
@@ -225,15 +220,21 @@ public class Main {
                 }
             }
             HTMLBranch += "</form></body></html>";
-            for (j = 0; j < commitsR.length; ++j) {
-            }
             //--------End of i
             //--------ii
             command = "git tag --contains " + branchesNames[i];
             commandResults = execute(command, filePath, null);
-
-            HTMLBranch += "Tags " + commandResults + "<br/>";
-            HTMLBranch += "</li>";
+            String tagsArray[] = commandResults.split("\\r?\\n");
+            HTMLBranch += "<br/>";
+            HTMLBranch += "<div class=\"container\"><h3>    <img alt=\"My Image12\" src=\"tag.png\" width=\"30\" height=\"25\" align=\"left\"/>    &nbsp; Branch's tags </h3></div><p/><p/>  <div class=\"panel panel-info\">      <div class=\"panel-body\" style=\"font-weight: bold;\">Tags</div></div>";
+            if ((tagsArray.length > 0) || (!tagsArray[0].equals(""))) {
+                for (j = 0; j < tagsArray.length; ++j) {
+                    HTMLBranch += "<h4>" + tagsArray[j] + "</h4></br>";
+                }
+            }
+            else {
+                HTMLBranch += "<h4>No tags available for this repository.</h4></br>";
+            }
             HTMLBranch += "</div></div></div></div></form></body></html>";
 
             BufferedWriter writer = null;
@@ -469,12 +470,21 @@ public class Main {
         scanner = new Scanner(nfirst);
         fyear = scanner.nextDouble(); fmonth = scanner.nextDouble(); fday = scanner.nextDouble();
         Double totalDays = 0.0, totalMonths = 0.0, totalYears = 0.0;
-        if (lyear == fyear) {
+
+        if (Double.compare(fyear, lyear) == 0) {
             totalYears = 1.0;
             totalMonths = lmonth - fmonth;
-            totalDays = ((lmonth - 1) - (fmonth + 1))*30.0 + fday + lday;
+            if (Double.compare(fmonth, lmonth) == 0) {
+                totalDays = lday - fday;
+            }
+            else if (totalMonths == 1) {
+                totalDays = 30 - fday + lday;
+            }
+            else {
+                totalDays = ((lmonth - 1.0) - (fmonth + 1.0))*30.0 + fday + lday;
+            }
         }
-        else if (lyear - fyear == 1) {
+        else if (lyear - fyear == 1.0) {
             totalYears = 1.0;
             totalMonths = 12.0 - fmonth + lmonth + 1;
             totalDays = (totalMonths - 1.0)*30.0 + fday + lday;
@@ -522,19 +532,19 @@ public class Main {
 
         for (i = 0; i < numOfCommitters; ++i) {
             String perc = String.format("%.2f", perYear.get(i).getAmmount());
-            HTMLFile += "<tr><td>" + perYear.get(i).getName() + "</td><td>" + totalYears + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "%</td></tr>";
+            HTMLFile += "<tr><td>" + perYear.get(i).getName() + "</td><td>" + totalYears + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "</td></tr>";
         }
         HTMLFile += "</tbody></table><p/>";
         HTMLFile = addHTML10(HTMLFile);
         for (i = 0; i < numOfCommitters; ++i) {
             String perc = String.format("%.2f", perMonth.get(i).getAmmount());
-            HTMLFile += "<tr><td>" + perMonth.get(i).getName() + "</td><td>" + totalMonths + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "%</td></tr>";
+            HTMLFile += "<tr><td>" + perMonth.get(i).getName() + "</td><td>" + totalMonths + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "</td></tr>";
         }
         HTMLFile += "</tbody></table><p/>";
         HTMLFile = addHTML11(HTMLFile);
         for (i = 0; i < numOfCommitters; ++i) {
             String perc = String.format("%.2f", perDay.get(i).getAmmount());
-            HTMLFile += "<tr><td>" + perDay.get(i).getName() + "</td><td>" + totalDays + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "%</td></tr>";
+            HTMLFile += "<tr><td>" + perDay.get(i).getName() + "</td><td>" + totalDays + "</td><td>" + commitsArray[i] + "</td><td>" + perc + "</td></tr>";
         }
         HTMLFile += "</tbody></table><p/>";
 
@@ -657,7 +667,7 @@ public class Main {
             String perc3 = String.format("%.2f", (changes[i][0] + changes[i][1])/2);
             HTMLFile += "<tr><td>" + committersNames[i] + "</td><td>" + perc1 + "</td><td>" +perc2 + "</td><td>" + perc3 + "</td></tr>";
 		}
-        HTMLFile += "</tbody></table><p/>    </form></body></html>";
+        HTMLFile += "</tbody></table><p/></br></form></body></html>";
 
         /*----------------------------END OF 7--------------------------------*/
         BufferedWriter writer = null;
