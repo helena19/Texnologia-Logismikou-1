@@ -60,5 +60,34 @@ public class Main {
 		Integer numOfFiles = fileNames.length;
 		//System.out.println("Repository contains " + numOfFiles + " files.");
 		/*----------------------------END OF 1--------------------------------*/
+
+		/*----------------------------------2---------------------------------*/
+		ArrayList<Integer> numOfLines = new ArrayList<Integer>();
+		for (String filename : fileNames) {
+			command = filePath + "/" + filename;
+			String line = null;
+            Integer filelines = 0;
+            try {
+                FileReader fileReader = new FileReader(command);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+                while((line = bufferedReader.readLine()) != null) {
+                    filelines++;
+                }
+                bufferedReader.close();
+            }
+            catch(FileNotFoundException ex) {
+                System.out.println("Unable to open file '" + command + "'");
+            }
+            catch(IOException ex) {
+                System.out.println("Error reading file '" + command + "'");
+            }
+			numOfLines.add(filelines);
+		}
+		Integer totalLines = 0;
+		for (Integer n : numOfLines) {
+			totalLines += n;
+		}
+		/*----------------------------END OF 2--------------------------------*/
 	}
 }
