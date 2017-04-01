@@ -91,3 +91,20 @@ public class Main {
 		/*----------------------------END OF 2--------------------------------*/
 	}
 }
+ /*----------------------------------3---------------------------------*/
+        //--------Branches
+		command = "git branch";
+		commandResults = execute(command, filePath, null);
+		String branchesNames[] = commandResults.split("\\r?\\n");
+		Integer numOfBranches = branchesNames.length;
+		for (i = 0; i < numOfBranches; ++i) {
+			String temp = branchesNames[i];
+			String newtemp = temp.replace("*", " ");
+			branchesNames[i] = newtemp;
+		}
+        int realNumber = 0;
+        for (i = 0; i < numOfBranches; ++i) {
+            if (!branchesNames[i].contains("->")) realNumber++;
+        }
+/*----------------------------END OF 3--------------------------------*/
+
