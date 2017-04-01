@@ -104,6 +104,45 @@ public class Main {
         int realNumber = 0;
         for (i = 0; i < numOfBranches; ++i) {
             if (!branchesNames[i].contains("->")) realNumber++;
+
+//--------End of Branches
+
+        HTMLFile = addHTML4(HTMLFile);
+
+        //--------Tags
+	command = "git tag";
+	commandResults = execute(command, filePath, null);
+        Integer numOfTags = 0;
+        String tagsNames[] = commandResults.split("\\r?\\n");
+        if (commandResults.equals("")) {
+            numOfTags = 0;
+        }
+        else {
+		    numOfTags = tagsNames.length;
+        }
+        
+        //--------End of Tags
+
+        HTMLFile = addHTML5(HTMLFile);
+
+        //--------Committers
+        command = "git shortlog -s -n HEAD";                                    //-e for email
+        commandResults = execute(command, filePath, null);
+        String committers[] = commandResults.split("\\r?\\n");
+        Integer numOfCommitters = committers.length;
+        String committersNames[] = new String[numOfCommitters];
+        Double commitsArray[] = new Double[numOfCommitters];
+        for (i = 0; i < numOfCommitters; ++i) {
+            scanner = new Scanner(committers[i]);
+            commitsArray[i] = scanner.nextDouble();
+            String name = scanner.next();
+            while (scanner.hasNext()) {
+                name = name + " " + scanner.next();
+            }
+            committersNames[i] = name;
+        }
+       
+        //--------End of Committers
         }
 		/*----------------------------END OF 3--------------------------------*/
 
@@ -122,35 +161,11 @@ public class Main {
             String lastCommit = commitsN[2];
             lastCommit = lastCommit.replace("Date:   ","");
 
-            HTMLFile += "<td><a href=\"" + branchesNames[i] + ".html\">";
-            HTMLFile += branchesNames[i] + "</a></td>";
-            HTMLFile += "<td>" + firstCommit + "</td>";
-            HTMLFile += "<td>"+ lastCommit + "</td>";
+         
 
             //--------i
 
-            String HTMLBranch = branchHTML1(args);
-            HTMLBranch += "&nbsp;" + branchesNames[i] + "</h3>";
-            for (j = 0; j < commitsR.length; ++j) {
-                if (commitsR[j].startsWith("commit")) {
-                    HTMLBranch += "<br/>";
-                    HTMLBranch += "<h4><img alt=\"My Image7\" src=\"commit.png\" width=\"25\" height=\"25\"/>&nbsp;";
-                    HTMLBranch += commitsR[j] + "</h4>";
-                    HTMLBranch += "<hr>";
-                }
-                else if (commitsR[j].startsWith("Author:")){
-                    HTMLBranch += "<h5><img alt=\"My Image8\" src=\"user.png\" width=\"25\" height=\"25\"/>&nbsp;" + commitsR[j] + "</h5>";
-                }
-                else if (commitsR[j].startsWith("Date:")) {
-                    HTMLBranch += "<h5><img alt=\"My Image9\" src=\"callendar.jpeg\" width=\"25\" height=\"25\"/>&nbsp;" + commitsR[j] + "</h5>";
-                }
-                else {
-                    HTMLBranch += "<h6>" + commitsR[j] + "</h6>";
-                }
-            }
-            HTMLBranch += "</form></body></html>";
-            for (j = 0; j < commitsR.length; ++j) {
-            }
+            
             //--------End of i
             //--------ii
             command = "git tag --contains " + branchesNames[i];
